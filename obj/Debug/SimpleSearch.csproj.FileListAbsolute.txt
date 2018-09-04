@@ -1,0 +1,14 @@
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\bin\Debug\SimpleSearch.exe.config
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.csprojResolveAssemblyReference.cache
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\MainWindow.g.cs
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\App.g.cs
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch_MarkupCompile.cache
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch_MarkupCompile.lref
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\bin\Debug\SimpleSearch.exe
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\bin\Debug\SimpleSearch.pdb
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\MainWindow.baml
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.g.resources
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.Properties.Resources.resources
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.csproj.GenerateResource.Cache
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.exe
+g:\users\clemens\documents\visual studio 2015\Projects\SimpleSearch\obj\Debug\SimpleSearch.pdb
