@@ -27,40 +27,86 @@ namespace SimpleSearch
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (tbxPath.Text.Length == 0 || tbxKey.Text.Length == 0) return;
+            if (tbxKey.Text.Length == 0) return;
 
-            lbxFound.Items.Clear();
-            lbxError.Items.Clear();
+            string path = Path.GetFullPath(tbxPath.Text);
+            string key = tbxKey.Text;
+            bool caseSensetive = cbxCaseSensetive.IsChecked == true;
 
-            Folder(tbxPath.Text);
+            Task.Factory.StartNew(() => Search(path, key, caseSensetive));
         }
 
-        private void Folder(string folder)
+        private void Search(string path, string key, bool caseSensetive)
         {
-            if (Contains(folder)) lbxFound.Items.Add(folder);
+            Queue<string> errors = new Queue<string>();
+
+            if (caseSensetive)
+            {
+                key = key.ToLower();
+
+                foreach (string element in GetAllFilesAndDirectories(Path.GetFullPath(path), errors))
+                {
+                    if (Path.GetFileName(element).ToLower().Contains(key))
+                    {
+                        Dispatcher.InvokeAsync(() => lbxFound.Items.Add(element));
+                    }
+
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        while (errors.Any()) lbxError.Items.Add(errors.Dequeue());
+                    });
+                }
+            }
+            else
+            {
+                foreach (string element in GetAllFilesAndDirectories(Path.GetFullPath(path), errors))
+                {
+                    if (Path.GetFileName(element).Contains(key))
+                    {
+                        Dispatcher.InvokeAsync(() => lbxFound.Items.Add(element));
+                    }
+
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        while (errors.Count > 0) lbxError.Items.Add(errors.Dequeue());
+                    });
+                }
+            }
+        }
+
+        private IEnumerable<string> GetAllFilesAndDirectories(string directory, Queue<string> errors)
+        {
+            yield return directory;
+
+            string[] files = new string[0];
+            string[] directories = new string[0];
 
             try
             {
-                foreach (string file in Directory.GetFiles(folder))
-                {
-                    if (Contains(Path.GetFileName(file)))
-                    {
-                        lbxFound.Items.Add(file);
-                    }
-                }
-
-                foreach (string sub in Directory.GetDirectories(folder)) Folder(sub);
+                files = Directory.GetFiles(directory);
             }
             catch (Exception e)
             {
-                string error = folder + "\n" + e.Message;
-                lbxError.Items.Add(error);
+                string error = directory + "\n" + e.Message;
+                errors.Enqueue(error);
             }
-        }
 
-        private bool Contains(string text)
-        {
-            return text.ToLower().Contains(tbxKey.Text.ToLower());
+            try
+            {
+                directories = Directory.GetDirectories(directory);
+            }
+            catch (Exception e)
+            {
+                string error = directory + "\n" + e.Message;
+                errors.Enqueue(error);
+            }
+
+            foreach (string file in files) yield return file;
+
+            foreach (string sub in directories)
+            {
+                foreach (string file in GetAllFilesAndDirectories(sub, errors)) yield return file;
+            }
         }
     }
 }
