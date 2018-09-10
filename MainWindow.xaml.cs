@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace SimpleSearch
 {
@@ -20,13 +12,36 @@ namespace SimpleSearch
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string isSearchingButtonContent = "Cancel", isNotSearchingButtonContent = "Search";
+
+        private bool isSearching;
+
+        public bool IsSearching
+        {
+            get { return isSearching; }
+            set
+            {
+                if (value == isSearching) return;
+
+                isSearching = value;
+
+                Dispatcher.Invoke(() => btnSearch.Content = isSearching ? isSearchingButtonContent : isNotSearchingButtonContent);
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
+            if (isSearching)
+            {
+                IsSearching = false;
+                return;
+            }
+
             if (tbxKey.Text.Length == 0) return;
 
             string path = Path.GetFullPath(tbxPath.Text);
@@ -38,6 +53,8 @@ namespace SimpleSearch
 
         private void Search(string path, string key, bool caseSensetive)
         {
+            IsSearching = true;
+
             Queue<string> errors = new Queue<string>();
 
             if (caseSensetive)
@@ -55,6 +72,8 @@ namespace SimpleSearch
                     {
                         while (errors.Any()) lbxError.Items.Add(errors.Dequeue());
                     });
+
+                    if (!IsSearching) return;
                 }
             }
             else
@@ -70,8 +89,12 @@ namespace SimpleSearch
                     {
                         while (errors.Count > 0) lbxError.Items.Add(errors.Dequeue());
                     });
+
+                    if (!IsSearching) return;
                 }
             }
+
+            IsSearching = false;
         }
 
         private IEnumerable<string> GetAllFilesAndDirectories(string directory, Queue<string> errors)
