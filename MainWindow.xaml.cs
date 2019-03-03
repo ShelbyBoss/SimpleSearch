@@ -48,6 +48,9 @@ namespace SimpleSearch
             string key = tbxKey.Text;
             bool caseSensetive = cbxCaseSensetive.IsChecked == true;
 
+            lbxFound.Items.Clear();
+            lbxError.Items.Clear();
+
             Task.Factory.StartNew(() => Search(path, key, caseSensetive));
         }
 
